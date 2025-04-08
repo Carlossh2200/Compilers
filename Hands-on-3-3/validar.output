@@ -1,0 +1,354 @@
+Terminals which are not used
+
+   NUMBER
+
+
+State 10 conflicts: 2 shift/reduce
+
+
+Grammar
+
+    0 $accept: input $end
+
+    1 input: /* empty */
+    2      | input expr '\n'
+    3      | input error '\n'
+
+    4 expr: expr '+' term
+    5     | expr '-' term
+    6     | term
+
+    7 term: term '*' factor
+    8     | term '/' factor
+    9     | factor
+
+   10 factor: '(' expr ')'
+   11       | logical
+
+   12 logical: logical AND term
+   13        | logical OR term
+   14        | NOT factor
+   15        | BOOL
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'\n' (10) 2 3
+'(' (40) 10
+')' (41) 10
+'*' (42) 7
+'+' (43) 4
+'-' (45) 5
+'/' (47) 8
+error (256) 3
+NUMBER (258)
+BOOL (259) 15
+AND (260) 12
+OR (261) 13
+NOT (262) 14
+
+
+Nonterminals, with rules where they appear
+
+$accept (15)
+    on left: 0
+input (16)
+    on left: 1 2 3, on right: 0 2 3
+expr (17)
+    on left: 4 5 6, on right: 2 4 5 10
+term (18)
+    on left: 7 8 9, on right: 4 5 6 7 8 12 13
+factor (19)
+    on left: 10 11, on right: 7 8 9 14
+logical (20)
+    on left: 12 13 14 15, on right: 11 12 13
+
+
+state 0
+
+    0 $accept: . input $end
+
+    $default  reduce using rule 1 (input)
+
+    input  go to state 1
+
+
+state 1
+
+    0 $accept: input . $end
+    2 input: input . expr '\n'
+    3      | input . error '\n'
+
+    $end   shift, and go to state 2
+    error  shift, and go to state 3
+    BOOL   shift, and go to state 4
+    NOT    shift, and go to state 5
+    '('    shift, and go to state 6
+
+    expr     go to state 7
+    term     go to state 8
+    factor   go to state 9
+    logical  go to state 10
+
+
+state 2
+
+    0 $accept: input $end .
+
+    $default  accept
+
+
+state 3
+
+    3 input: input error . '\n'
+
+    '\n'  shift, and go to state 11
+
+
+state 4
+
+   15 logical: BOOL .
+
+    $default  reduce using rule 15 (logical)
+
+
+state 5
+
+   14 logical: NOT . factor
+
+    BOOL  shift, and go to state 4
+    NOT   shift, and go to state 5
+    '('   shift, and go to state 6
+
+    factor   go to state 12
+    logical  go to state 10
+
+
+state 6
+
+   10 factor: '(' . expr ')'
+
+    BOOL  shift, and go to state 4
+    NOT   shift, and go to state 5
+    '('   shift, and go to state 6
+
+    expr     go to state 13
+    term     go to state 8
+    factor   go to state 9
+    logical  go to state 10
+
+
+state 7
+
+    2 input: input expr . '\n'
+    4 expr: expr . '+' term
+    5     | expr . '-' term
+
+    '+'   shift, and go to state 14
+    '-'   shift, and go to state 15
+    '\n'  shift, and go to state 16
+
+
+state 8
+
+    6 expr: term .
+    7 term: term . '*' factor
+    8     | term . '/' factor
+
+    '*'  shift, and go to state 17
+    '/'  shift, and go to state 18
+
+    $default  reduce using rule 6 (expr)
+
+
+state 9
+
+    9 term: factor .
+
+    $default  reduce using rule 9 (term)
+
+
+state 10
+
+   11 factor: logical .
+   12 logical: logical . AND term
+   13        | logical . OR term
+
+    AND  shift, and go to state 19
+    OR   shift, and go to state 20
+
+    AND       [reduce using rule 11 (factor)]
+    OR        [reduce using rule 11 (factor)]
+    $default  reduce using rule 11 (factor)
+
+
+state 11
+
+    3 input: input error '\n' .
+
+    $default  reduce using rule 3 (input)
+
+
+state 12
+
+   14 logical: NOT factor .
+
+    $default  reduce using rule 14 (logical)
+
+
+state 13
+
+    4 expr: expr . '+' term
+    5     | expr . '-' term
+   10 factor: '(' expr . ')'
+
+    '+'  shift, and go to state 14
+    '-'  shift, and go to state 15
+    ')'  shift, and go to state 21
+
+
+state 14
+
+    4 expr: expr '+' . term
+
+    BOOL  shift, and go to state 4
+    NOT   shift, and go to state 5
+    '('   shift, and go to state 6
+
+    term     go to state 22
+    factor   go to state 9
+    logical  go to state 10
+
+
+state 15
+
+    5 expr: expr '-' . term
+
+    BOOL  shift, and go to state 4
+    NOT   shift, and go to state 5
+    '('   shift, and go to state 6
+
+    term     go to state 23
+    factor   go to state 9
+    logical  go to state 10
+
+
+state 16
+
+    2 input: input expr '\n' .
+
+    $default  reduce using rule 2 (input)
+
+
+state 17
+
+    7 term: term '*' . factor
+
+    BOOL  shift, and go to state 4
+    NOT   shift, and go to state 5
+    '('   shift, and go to state 6
+
+    factor   go to state 24
+    logical  go to state 10
+
+
+state 18
+
+    8 term: term '/' . factor
+
+    BOOL  shift, and go to state 4
+    NOT   shift, and go to state 5
+    '('   shift, and go to state 6
+
+    factor   go to state 25
+    logical  go to state 10
+
+
+state 19
+
+   12 logical: logical AND . term
+
+    BOOL  shift, and go to state 4
+    NOT   shift, and go to state 5
+    '('   shift, and go to state 6
+
+    term     go to state 26
+    factor   go to state 9
+    logical  go to state 10
+
+
+state 20
+
+   13 logical: logical OR . term
+
+    BOOL  shift, and go to state 4
+    NOT   shift, and go to state 5
+    '('   shift, and go to state 6
+
+    term     go to state 27
+    factor   go to state 9
+    logical  go to state 10
+
+
+state 21
+
+   10 factor: '(' expr ')' .
+
+    $default  reduce using rule 10 (factor)
+
+
+state 22
+
+    4 expr: expr '+' term .
+    7 term: term . '*' factor
+    8     | term . '/' factor
+
+    '*'  shift, and go to state 17
+    '/'  shift, and go to state 18
+
+    $default  reduce using rule 4 (expr)
+
+
+state 23
+
+    5 expr: expr '-' term .
+    7 term: term . '*' factor
+    8     | term . '/' factor
+
+    '*'  shift, and go to state 17
+    '/'  shift, and go to state 18
+
+    $default  reduce using rule 5 (expr)
+
+
+state 24
+
+    7 term: term '*' factor .
+
+    $default  reduce using rule 7 (term)
+
+
+state 25
+
+    8 term: term '/' factor .
+
+    $default  reduce using rule 8 (term)
+
+
+state 26
+
+    7 term: term . '*' factor
+    8     | term . '/' factor
+   12 logical: logical AND term .
+
+    $default  reduce using rule 12 (logical)
+
+
+state 27
+
+    7 term: term . '*' factor
+    8     | term . '/' factor
+   13 logical: logical OR term .
+
+    $default  reduce using rule 13 (logical)
